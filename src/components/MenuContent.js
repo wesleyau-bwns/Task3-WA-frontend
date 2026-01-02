@@ -8,13 +8,14 @@ import Stack from "@mui/material/Stack";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-import { logout } from "../utils/logout";
+import { useLogout } from "../utils/useLogout";
 import { useAuth } from "../contexts/AuthContext";
 import { ALL_PAGES } from "../constants/pages";
 
 export default function MenuContent() {
   const location = useLocation();
   const { user } = useAuth();
+  const logout = useLogout();
 
   // Filter pages based on user permissions
   const accessiblePages = ALL_PAGES.filter((page) =>

@@ -4,6 +4,7 @@ import {
   isTokenExpired,
   clearTokens,
 } from "../utils/tokenService";
+import { BASENAME } from "../config";
 import { refreshToken } from "./endpoints/auth";
 
 const api = axios.create({
@@ -33,8 +34,8 @@ api.interceptors.request.use(async (config) => {
       const data = await refreshToken();
       token = data.access_token;
     } catch (err) {
-      clearTokens();
-      window.location.href = process.env.PUBLIC_URL || "/";
+      // clearTokens();
+      window.location.href = `${window.location.origin}${BASENAME}/login`;
       return Promise.reject(err);
     }
   }
@@ -52,7 +53,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       clearTokens();
-      window.location.href = process.env.PUBLIC_URL || "/";
+      window.location.href = `${window.location.origin}${BASENAME}/login`;
     }
     return Promise.reject(error);
   }

@@ -16,6 +16,7 @@ import AppTheme from "../theme/AppTheme";
 import ColorModeSelect from "../theme/ColorModeSelect";
 
 import rawApi from "../api/rawAxios";
+import { useAuth } from "../contexts/AuthContext";
 import { setAccessToken } from "../utils/tokenService";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -71,6 +72,8 @@ export default function SignIn(props) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
 
+  const { setUser } = useAuth();
+
   const validateInputs = () => {
     const email = document.getElementById("email");
     const password = document.getElementById("password");
@@ -120,6 +123,8 @@ export default function SignIn(props) {
         access_token: res.data.access_token,
         expires_in: res.data.expires_in,
       });
+
+      setUser(res.data.user);
 
       navigate("/dashboard");
     } catch (err) {

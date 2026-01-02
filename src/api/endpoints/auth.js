@@ -1,3 +1,4 @@
+import api from "../axios";
 import rawApi from "../rawAxios";
 import { setAccessToken, clearTokens } from "../../utils/tokenService";
 
@@ -17,5 +18,5 @@ export const refreshToken = async () => {
 };
 
 export const logoutRequest = async () => {
-  return rawApi.post("/api/auth/logout");
+  return api.post("/api/auth/logout");
 };

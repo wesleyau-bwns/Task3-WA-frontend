@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import LoadingScreen from "./LoadingScreen";
 import { useAuth } from "../contexts/AuthContext";
-import { isAuthReady } from "../utils/tokenService";
 
 export default function ProtectedRoute({
   children,
@@ -12,17 +12,15 @@ export default function ProtectedRoute({
   const location = useLocation();
 
   useEffect(() => {
-    // Fetch user data if token exists but user data isn't loaded yet
-    if (isAuthReady() && !user && !loading) {
-      fetchUser();
-    }
+    // Attempt to fetch user
+    if (!user && !loading) fetchUser();
   }, [user, loading, fetchUser]);
 
-  // Redirect to sign-in if no token is available
-  if (!isAuthReady()) return <Navigate to="/" replace />;
+  // User fetch in progress
+  if (loading) return <LoadingScreen />;
 
-  // Show loading indicator while fetching user data
-  if (loading || !user) return null;
+  // User fetch unsuccessful
+  if (!user && !loading) return <Navigate to="/login" replace />;
 
   // Check permissions if specified
   if (allowedPermissions.length > 0) {
